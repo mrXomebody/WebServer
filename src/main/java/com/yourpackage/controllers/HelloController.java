@@ -3,6 +3,7 @@ package com.yourpackage.controllers;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +14,13 @@ import java.util.Map;
 
 @RestController
 public class HelloController {
+
+    private final RestTemplate restTemplate;
+
+
+    public HelloController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
+    }
 
     @GetMapping("/api/hello")
     public Map<String, Object> hello(@RequestParam String visitor_name, HttpServletRequest request) {
@@ -31,14 +39,13 @@ public class HelloController {
     }
 
     private String getLocation(String ip) {
-        RestTemplate restTemplate = new RestTemplate();
-        String apiUrl = "https://api.ipgeolocation.io/ipgeo?apiKey=YOUR_API_KEY&ip=" + ip;
+        String apiUrl = "http://ip-api.com/json/" + ip;
 
         ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 apiUrl,
                 org.springframework.http.HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<Map<String, Object>>() {
+                new ParameterizedTypeReference<>() {
                 });
 
         Map<String, Object> apiResponse = responseEntity.getBody();
@@ -51,7 +58,6 @@ public class HelloController {
 
     @SuppressWarnings("unchecked")
     private String getTemperature(String location) {
-        RestTemplate restTemplate = new RestTemplate();
         String apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + location
                 + "&appid=YOUR_API_KEY&units=metric";
 
@@ -59,7 +65,7 @@ public class HelloController {
                 apiUrl,
                 org.springframework.http.HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<Map<String, Object>>() {
+                new ParameterizedTypeReference<>() {
                 });
 
         Map<String, Object> apiResponse = responseEntity.getBody();
