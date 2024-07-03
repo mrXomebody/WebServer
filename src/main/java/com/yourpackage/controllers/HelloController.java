@@ -17,7 +17,6 @@ public class HelloController {
 
     private final RestTemplate restTemplate;
 
-
     public HelloController(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
@@ -59,7 +58,7 @@ public class HelloController {
     @SuppressWarnings("unchecked")
     private String getTemperature(String location) {
         String apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + location
-                + "&appid=YOUR_API_KEY&units=metric";
+                + "&appid=5b139ff3911845d4afb150936240307&units=metric";
 
         ResponseEntity<Map<String, Object>> responseEntity = restTemplate.exchange(
                 apiUrl,
